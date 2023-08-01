@@ -37,6 +37,8 @@ function App() {
   const handleStart = useCallback(() => {
     setIsStartedStartCounterTime(true);
     setStartCounterTime(Date.now());
+
+    // playing all sounds once at the start to get rid of error that sound can be played only on gesture
     audioStart.volume = 0.001;
     audioStart.play();
     audioStop.volume = 0.001;
@@ -134,16 +136,34 @@ function App() {
   return (
     <Box color="bg" className="App">
       <Box
+        position="relative"
         border="white"
         borderStyle="solid"
         borderRadius=".5rem"
-        p={6}
+        px={10}
+        py={6}
         color="white"
-        fontSize="2rem"
+        fontSize="3rem"
+        minWidth="200px"
       >
         {time.toFixed(1)}
+        <Box
+          color="white"
+          fontSize="2rem"
+          lineHeight="2rem"
+          position="absolute"
+          bottom="-1rem"
+          left="0"
+          right="0"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Box background="bg" px=".5rem">
+            {exerciseCount}
+          </Box>
+        </Box>
       </Box>
-      <div className="App-count">Round: {exerciseCount}</div>
       <div className={`App-states`}>
         <div
           className={`App-engage App-state ${
