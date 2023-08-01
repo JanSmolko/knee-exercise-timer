@@ -7,10 +7,12 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useWakeLock } from "react-screen-wake-lock";
 import "./App.css";
 
 function App() {
+  const { request, release } = useWakeLock();
   const [exerciseRepeatTimes, setExerciseRepeatTimes] = useState("30");
   const [exerciseDuration, setExerciseDuration] = useState("10");
   const [exercisePause, setExercisePause] = useState("10");
@@ -34,7 +36,13 @@ function App() {
     setIsExercise(true);
   }, [audioFullStop, audioStart, audioStop]);
 
-  const handleStart = useCallback(() => {
+  const handleStart = useCallback(async () => {
+    try {
+      request("screen");
+    } catch {
+      prompt("uns");
+    }
+
     setIsStartedStartCounterTime(true);
     setStartCounterTime(Date.now());
 
@@ -45,15 +53,17 @@ function App() {
     audioStop.play();
     audioFullStop.volume = 0.001;
     audioFullStop.play();
-  }, [audioFullStop, audioStart, audioStop]);
+  }, [audioFullStop, audioStart, audioStop, request]);
 
   const stop = useCallback(() => {
+    release();
+
     setIsStartedStartCounterTime(false);
     setIsStarted(false);
     setExerciseCount(0);
     setIsExercise(false);
     setTime(0);
-  }, []);
+  }, [release]);
 
   const handleStop = useCallback(() => {
     stop();
@@ -134,7 +144,7 @@ function App() {
   ]);
 
   return (
-    <Box color="bg" className="App">
+    <Box color="white" className="App">
       <Box
         position="relative"
         border="white"
@@ -142,13 +152,11 @@ function App() {
         borderRadius=".5rem"
         px={10}
         py={6}
-        color="white"
         fontSize="3rem"
         minWidth="200px"
       >
         {time.toFixed(1)}
         <Box
-          color="white"
           fontSize="2rem"
           lineHeight="2rem"
           position="absolute"
@@ -164,22 +172,23 @@ function App() {
           </Box>
         </Box>
       </Box>
-      <div className={`App-states`}>
-        <div
+      <Box className={`App-states`}>
+        <Box
           className={`App-engage App-state ${
             isExercise ? "App-state-open" : "App-state-close"
           }`}
         >
           ENGAGE
-        </div>
-        <div
+        </Box>
+        <Box
           className={`App-pause App-state ${
             isExercise ? "App-state-close" : "App-state-open"
           }`}
+          color="bg"
         >
           PAUSE
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       <Stack spacing={3}>
         <FormControl variant="floating">
