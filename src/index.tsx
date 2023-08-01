@@ -1,19 +1,66 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { ChakraBaseProvider, extendBaseTheme } from "@chakra-ui/react";
+import chakraTheme from "@chakra-ui/theme";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  document.getElementById("root") as HTMLElement
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const { Button, Input, FormLabel } = chakraTheme.components;
+const activeLabelStyles = {
+  transform: "scale(0.85) translateY(-24px)",
+};
+const theme = extendBaseTheme({
+  colors: {
+    bg: "#282c34",
+  },
+  components: {
+    Button,
+    Input,
+    FormLabel,
+    Form: {
+      variants: {
+        floating: {
+          container: {
+            _focusWithin: {
+              label: {
+                ...activeLabelStyles,
+              },
+            },
+            position: "relative",
+            marginBottom: ".5rem",
+            color: "white",
+            "input:not(:placeholder-shown) + label, .chakra-select__wrapper + label, textarea:not(:placeholder-shown) ~ label":
+              {
+                ...activeLabelStyles,
+              },
+            label: {
+              top: 0,
+              left: 0,
+              zIndex: 2,
+              position: "absolute",
+              backgroundColor: "bg",
+              color: "white",
+              pointerEvents: "none",
+              mx: 3,
+              px: 1,
+              my: 2,
+              transformOrigin: "left top",
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+root.render(
+  <React.StrictMode>
+    <ChakraBaseProvider theme={theme}>
+      <App />
+    </ChakraBaseProvider>
+  </React.StrictMode>
+);
