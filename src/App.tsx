@@ -69,6 +69,7 @@ function App() {
     setIsStartedStartCounterTime(false);
     setIsStarted(false);
     setExerciseCount(0);
+    setTime(0);
     setIsExercise(false);
     setTime(0);
   }, [release]);
