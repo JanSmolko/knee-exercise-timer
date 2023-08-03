@@ -7,15 +7,25 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useWakeLock } from "react-screen-wake-lock";
 import "./App.css";
+import { useLocalStorage } from "./useLocalStorage";
 
 function App() {
   const { request, release } = useWakeLock();
-  const [exerciseRepeatTimes, setExerciseRepeatTimes] = useState("30");
-  const [exerciseDuration, setExerciseDuration] = useState("10");
-  const [exercisePause, setExercisePause] = useState("10");
+  const [exerciseRepeatTimes, setExerciseRepeatTimes] = useLocalStorage(
+    "exerciseRepeatTimes",
+    "30"
+  );
+  const [exerciseDuration, setExerciseDuration] = useLocalStorage(
+    "exerciseDuration",
+    "10"
+  );
+  const [exercisePause, setExercisePause] = useLocalStorage(
+    "exercisePause",
+    "10"
+  );
   const [exerciseCount, setExerciseCount] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
   const [startedAt, setStartedAt] = useState(Date.now());
@@ -23,9 +33,9 @@ function App() {
   const [time, setTime] = useState(0);
   const [startCounterTime, setStartCounterTime] = useState(Date.now());
   const [isStartedCounterTime, setIsStartedStartCounterTime] = useState(false);
-  const audioStart = useMemo(() => new Audio("/start.mp3"), []);
-  const audioStop = useMemo(() => new Audio("/stop.mp3"), []);
-  const audioFullStop = useMemo(() => new Audio("/fullStop.mp3"), []);
+  const audioStart = useMemo(() => new Audio("/sounds/start.mp3"), []);
+  const audioStop = useMemo(() => new Audio("/sounds/stop.mp3"), []);
+  const audioFullStop = useMemo(() => new Audio("/sounds/fullStop.mp3"), []);
 
   const start = useCallback(() => {
     audioStart.volume = 1;
@@ -39,9 +49,7 @@ function App() {
   const handleStart = useCallback(async () => {
     try {
       request("screen");
-    } catch {
-      prompt("uns");
-    }
+    } catch {}
 
     setIsStartedStartCounterTime(true);
     setStartCounterTime(Date.now());
