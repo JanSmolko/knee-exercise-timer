@@ -251,10 +251,10 @@ function App() {
         </FormControl>
       </Stack>
       <HStack>
-        <Button onClick={handleStart} color="green">
+        <Button onClick={handleStart} color="green" size="lg">
           START
         </Button>
-        <Button onClick={handleStop} color="red">
+        <Button onClick={handleStop} color="red" size="lg">
           STOP
         </Button>
       </HStack>
