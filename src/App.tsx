@@ -6,6 +6,7 @@ import {
   HStack,
   Input,
   Stack,
+  Switch,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useWakeLock } from "react-screen-wake-lock";
@@ -25,6 +26,10 @@ function App() {
   const [exercisePause, setExercisePause] = useLocalStorage(
     "exercisePause",
     "10"
+  );
+  const [blinkOnStateChange, setBlinkOnStateChange] = useLocalStorage(
+    "blinkOnStateChange",
+    false
   );
   const [exerciseCount, setExerciseCount] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
@@ -153,7 +158,16 @@ function App() {
   ]);
 
   return (
-    <Box color="white" className="App">
+    <Box
+      color="white"
+      className={`App ${
+        blinkOnStateChange && isStarted
+          ? isExercise
+            ? "engaged"
+            : "paused"
+          : ""
+      }`}
+    >
       <Box
         position="relative"
         border="white"
@@ -183,15 +197,15 @@ function App() {
       </Box>
       <Box className={`App-states`}>
         <Box
-          className={`App-engage App-state ${
-            isExercise ? "App-state-open" : "App-state-close"
+          className={`App-state App-state-engage ${
+            isExercise ? "open" : "close"
           }`}
         >
           ENGAGE
         </Box>
         <Box
-          className={`App-pause App-state ${
-            isExercise ? "App-state-close" : "App-state-open"
+          className={`App-state App-state-pause ${
+            isExercise ? "close" : "open"
           }`}
           color="bg"
         >
@@ -224,6 +238,16 @@ function App() {
             onChange={(e) => setExercisePause(e.target.value)}
           />
           <FormLabel>Exercise pause</FormLabel>
+        </FormControl>
+        <FormControl display="flex" mb="2rem">
+          <FormLabel mb="0">Blink?</FormLabel>
+          <Switch
+            value={blinkOnStateChange ? "true" : "false"}
+            isChecked={blinkOnStateChange ? true : false}
+            onChange={(e) => {
+              setBlinkOnStateChange(e.target.checked ? true : false);
+            }}
+          />
         </FormControl>
       </Stack>
       <HStack>

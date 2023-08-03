@@ -8,6 +8,12 @@
   justify-content: center;
   color: white;
 }
+.App.engaged {
+  animation: engageBlink 1s forwards alternate;
+}
+.App.paused {
+  animation: pauseBlink 0.5s forwards alternate;
+}
 
 .App-timer {
   font-size: 2rem;
@@ -26,12 +32,12 @@
   width: 200px;
   height: 100px;
 }
-.App-engage {
+.App-state-engage {
   font-size: 2rem;
   background-color: #ff5f15;
 }
 
-.App-pause {
+.App-state-pause {
   font-size: 2rem;
   background-color: #efefef;
 }
@@ -42,10 +48,34 @@
   right: 0;
   border-radius: 0.5rem;
 }
-.App-state-open {
+.App-state.open {
   transform: scaleX(1);
   transition-delay: 250ms;
 }
-.App-state-close {
+.App-state.close {
   transform: scaleX(0);
+}
+
+@keyframes engageBlink {
+  0% {
+    background: #282c34;
+  }
+  50% {
+    background: #ff5f15;
+  }
+  100% {
+    background: #282c34;
+  }
+}
+
+@keyframes pauseBlink {
+  0% {
+    background: #282c34;
+  }
+  50% {
+    background: #8f8f8f;
+  }
+  100% {
+    background: #282c34;
+  }
 }

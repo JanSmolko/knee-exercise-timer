@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-const { Button, Input, FormLabel } = chakraTheme.components;
+const { Button, Input, FormLabel, Switch } = chakraTheme.components;
 const activeLabelStyles = {
   transform: "scale(0.85) translateY(-24px)",
 };
@@ -24,6 +24,7 @@ const theme = extendBaseTheme({
     Button,
     Input,
     FormLabel,
+    Switch,
     Form: {
       variants: {
         floating: {
