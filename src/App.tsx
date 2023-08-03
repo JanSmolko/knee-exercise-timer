@@ -9,12 +9,12 @@ import {
   Switch,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useWakeLock } from "react-screen-wake-lock";
+import { useWakeLock } from "./useWakeLock";
 import "./App.css";
 import { useLocalStorage } from "./useLocalStorage";
 
 function App() {
-  const { request, release } = useWakeLock();
+  const { request, release, isRunning } = useWakeLock();
   const [exerciseRepeatTimes, setExerciseRepeatTimes] = useLocalStorage(
     "exerciseRepeatTimes",
     "30"
@@ -156,6 +156,13 @@ function App() {
     exerciseCount,
     handleStop,
   ]);
+
+  // if wake lock was released try to request again
+  useEffect(() => {
+    if (isExercise && !isRunning) {
+      request();
+    }
+  }, [isExercise, isRunning, request]);
 
   return (
     <Box
