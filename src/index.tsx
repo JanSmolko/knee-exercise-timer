@@ -4,6 +4,9 @@ import "./index.css";
 import App from "./App";
 import { ChakraBaseProvider, extendBaseTheme } from "@chakra-ui/react";
 import chakraTheme from "@chakra-ui/theme";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+
+serviceWorkerRegistration.register();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
